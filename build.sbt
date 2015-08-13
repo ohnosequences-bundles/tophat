@@ -1,7 +1,7 @@
 Nice.scalaProject
 
 name := "tophat"
-organization := "ohnosequencesBundles"
+organization := "ohnosequences-bundles"
 description := "A bundle for tophat tool"
 
 publishBucketSuffix := "era7.com"
