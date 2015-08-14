@@ -1,7 +1,7 @@
 Nice.scalaProject
 
 name := "tophat"
-organization := "ohnosequencesBundles"
+organization := "ohnosequences-bundles"
 description := "A bundle for tophat tool"
 
 publishBucketSuffix := "era7.com"
@@ -11,4 +11,7 @@ resolvers ++= Seq(
   "Era7 public maven snapshots" at s3("snapshots.era7.com").toHttps(s3region.value.toString)
 )
 
-libraryDependencies += "ohnosequences" %% "statika" % "2.0.0-SNAPSHOT"
+libraryDependencies ++= Seq (
+  "ohnosequences" %% "statika" % "2.0.0-SNAPSHOT",
+  "ohnosequences-bundles" %% "bowtie2" % "0.1.0-SNAPSHOT"
+)
