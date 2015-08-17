@@ -1,0 +1,2 @@
+- First release of the bundle to install Tophat
+- Takes the `tar.gz` file from S3 and links the binaries to path
