@@ -3,13 +3,13 @@ package ohnosequencesBundles.statika
 import ohnosequences.statika._, bundles._, instructions._
 import java.io.File
 
-abstract class Tophat(val version: String, val bowtie2: Bowtie2) extends Bundle(bowtie2) {
+abstract class Tophat(val version: String, val bowtie2: Bowtie2)
+  extends Bundle(bowtie2) { tophat =>
 
-  val usrbin = "/usr/bin/"
-  val tophatDir = s"tophat-${version}"
-  val tophatDistribution = s"tophat-${version}.Linux_x86_64"
+  val name = s"tophat-${version}.Linux_x86_64"
+  val tarGz = name + ".tar.gz"
 
-  val commands: Set[String] = Set(
+  val binaries: Set[String] = Set(
     "bam2fastx",
     "bam_merge",
     "bed_to_juncs",
@@ -30,16 +30,20 @@ abstract class Tophat(val version: String, val bowtie2: Bowtie2) extends Bundle(
     "tophat_reports"
   )
 
-  def linkCommand(cmd: String): Results = Seq("ln", "-s", new File(s"${tophatDistribution}/${cmd}").getAbsolutePath, s"${usrbin}/${cmd}")
+  lazy val download: CmdInstructions = cmd("wget")(
+    s"http://s3-eu-west-1.amazonaws.com/resources.ohnosequences.com/tophat/${version}/${tophat.tarGz}"
+  )
 
+  lazy val untar: CmdInstructions = cmd("tar")("-xvzf", tophat.tarGz)
 
-  def install: Results = {
-    Seq("wget", s"http://s3-eu-west-1.amazonaws.com/resources.ohnosequences.com/tophat/${version}/${tophatDistribution}.tar.gz", "-O", s"${tophatDistribution}.tar.gz") ->-
-    Seq("tar", "-xvzf", s"${tophatDistribution}.tar.gz") ->-
-    commands.foldLeft[Results](
-      Seq("echo", "linking tophat binaries")
-    ){ (acc, cmd) => acc ->- linkCommand(cmd) } ->-
-    success(s"${bundleName} is installed")
-  }
+  def linkCommand(binary: String): CmdInstructions = cmd("ln")("-s",
+    new File(tophat.name, binary).getCanonicalPath,
+    s"/usr/bin/${binary}"
+  )
+
+  def instructions: AnyInstructions =
+    download -&-
+    untar -&-
+    binaries.foldLeft[AnyInstructions]( Seq("echo", "linking tophat binaries") ){ _ -&- linkCommand(_) }
 
 }
