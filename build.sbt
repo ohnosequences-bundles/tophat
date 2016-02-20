@@ -12,6 +12,6 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq (
-  "ohnosequences"         %% "statika" % "2.0.0-M4",
-  "ohnosequences-bundles" %% "bowtie2" % "0.1.1"
+  "ohnosequences"         %% "statika" % "2.0.0-M5",
+  "ohnosequences-bundles" %% "bowtie2" % "0.2.0"
 )
