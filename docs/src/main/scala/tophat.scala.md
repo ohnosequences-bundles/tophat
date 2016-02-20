@@ -2,7 +2,7 @@
 ```scala
 package ohnosequencesBundles.statika
 
-import ohnosequences.statika._, bundles._, instructions._
+import ohnosequences.statika._
 import java.io.File
 
 abstract class Tophat(val version: String, val bowtie2: Bowtie2)
